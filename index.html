@@ -64,10 +64,6 @@
     			
             
     			
-    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
-    			
-            
-    			
     			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
     			
             
@@ -225,7 +221,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="适用于刚从Arduino语言转到AVR-C语言编程的人。"><a href="#适用于刚从Arduino语言转到AVR-C语言编程的人。" class="headerlink" title="适用于刚从Arduino语言转到AVR C语言编程的人。"></a>适用于刚从Arduino语言转到AVR C语言编程的人。</h2><p>##目标<br>理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。</p>
+        <h2 id="适用于从Arduino语言转到AVR-C语言编程。"><a href="#适用于从Arduino语言转到AVR-C语言编程。" class="headerlink" title="适用于从Arduino语言转到AVR C语言编程。"></a>适用于从Arduino语言转到AVR C语言编程。</h2><p>##目标<br>理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。</p>
 <hr>
 <p>##使用到的硬件</p>
 <ol>
@@ -245,7 +241,7 @@
 <hr>
 <p>##嵌入式的“Hello World”，点亮一盏LED<br>在Arduino语言中，只需要给某个Pin赋值就可以点亮一盏LED。用C语言编程与Arduino语言编程过程一致。首先看一下如何用Arduino语言点亮一盏灯：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#define led 13</span></span><br><span class="line">void <span class="function"><span class="title">setup</span></span>() &#123;</span><br><span class="line">  pinMode(led, OUTPUT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void <span class="function"><span class="title">loop</span></span>() &#123;</span><br><span class="line">  digitalWrite(led, HIGH);   </span><br><span class="line">  delay(1000);      </span><br><span class="line">  digitalWrite(led, LOW);   </span><br><span class="line">  delay(1000);                   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该程序可以在Arduino IDE的示例Blink中查看，其功能是小灯按两秒一个周期的频率闪烁。那么点亮一盏LED需要做什么？首先在“setup()”里初始化Pin的方向（输入or输出），然后给该Pin赋值0（熄灭）/1（点亮）。<br>那么同样的，使用C语言编程，也要完成这两步。Atmega328P的每个Pin有三个寄存器，可以通过配置这些寄存器来实现一些GPIO的功能。这里需要用到两个寄存器：DDxn和PORTxn。除了这两个寄存器，每个Pin还有一个Pinxn寄存器。关于这三个寄存器的详细描述，请参考文献：数据手册的P59。<br>如果你学过51单片机，那么应该对寄存器很了解了。在Atmega上的使用方法上没有区别。如果你并不了解寄存器，关于寄存器，它可以理解为一个开关，一般它的每一位有两个值0/1。假设我们的动作器是个灯，那么我可以通过操控这个开关来改变动作器的状态（点亮or熄灭）。以方向寄存器DDxn为例，这里的“x”代表着你所使用的Pin的Port位置。“n”代表着Pin在该Port上的位置。你可以很容易的在网络上找到Arduino的引脚图，比如下图是在Arduino官网截的：<br><img src="/home/lee/source/image/pin.PNG" alt="Arduino Pin-Diagram" title="Arduino Pin-Diagram"><br>回到点亮一盏LED上，首先需要配置Pin的方向，需要用到寄存器DDxn。当该寄存器为0时，Pin被配置成输入，1则是输出。从上图中可以很容易的找到你所使用的Pin的寄存器位置。以D3为例，它的寄存器位置为PD3。将该Pin配置为输出：</p>
+<p>该程序可以在Arduino IDE的示例Blink中查看，其功能是小灯按两秒一个周期的频率闪烁。那么点亮一盏LED需要做什么？首先在“setup()”里初始化Pin的方向（输入or输出），然后给该Pin赋值0（熄灭）/1（点亮）。<br>那么同样的，使用C语言编程，也要完成这两步。Atmega328P的每个Pin有三个寄存器，可以通过配置这些寄存器来实现一些GPIO的功能。这里需要用到两个寄存器：DDxn和PORTxn。除了这两个寄存器，每个Pin还有一个Pinxn寄存器。关于这三个寄存器的详细描述，请参考文献：数据手册的P59。<br>如果你学过51单片机，那么应该对寄存器很了解了。在Atmega上的使用方法上没有区别。如果你并不了解寄存器，关于寄存器，它可以理解为一个开关，一般它的每一位有两个值0/1。假设我们的动作器是个灯，那么我可以通过操控这个开关来改变动作器的状态（点亮or熄灭）。以方向寄存器DDxn为例，这里的“x”代表着你所使用的Pin的Port位置。“n”代表着Pin在该Port上的位置。你可以很容易的在网络上找到Arduino的引脚图，比如下图是在Arduino官网截的：<br><img src="/home/lee/source/image/pin.png" alt="Arduino Pin-Diagram" title="Arduino Pin-Diagram"><br>回到点亮一盏LED上，首先需要配置Pin的方向，需要用到寄存器DDxn。当该寄存器为0时，Pin被配置成输入，1则是输出。从上图中可以很容易的找到你所使用的Pin的寄存器位置。以D3为例，它的寄存器位置为PD3。将该Pin配置为输出：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD = 1 &lt;&lt; <span class="string">DDD3;</span></span><br></pre></td></tr></table></figure>
 <p>DDRD（可以理解为Digital Direction D）是整个PortD的方向寄存器，DDD3是Pin-D3的方向寄存器。通常来说我们配置一个Pin的方向，并不希望改变其它Pin的方向。所以需要通过移位运算来给DDD3赋值。当然你也可以用字节操作的方式来给DDD3赋值：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD |= 0x04;</span><br></pre></td></tr></table></figure>
@@ -348,7 +344,7 @@
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -371,25 +367,17 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
       
       
     
-      
-      
-      
-    
     
 
     <ul style="width: 70%">
     
     
       
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
       
         
       
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
-      
-        
-      
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
       
         
     </ul>
@@ -457,43 +445,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
 
     
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
-    
 
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
   	  	
     	</section>
     
