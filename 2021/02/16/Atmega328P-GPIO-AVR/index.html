@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>AVR 编程 ATMEGA328P GPIO 基础应用 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="适用于从Arduino语言转到AVR C语言编程。  目标理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。  使用到的硬件 Arduino uno 面包板 杜邦线 电阻 开关 LED 三极管   完整代码12345678910111213#include &lt;avr&#x2F;io.h&gt;int main() &amp;#123;">
+  <meta name="description" content="适用于从Arduino语言转到AVR C语言编程。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AVR 编程 ATMEGA328P GPIO 基础应用">
 <meta property="og:url" content="http://example.com/2021/02/16/Atmega328P-GPIO-AVR/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="适用于从Arduino语言转到AVR C语言编程。  目标理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。  使用到的硬件 Arduino uno 面包板 杜邦线 电阻 开关 LED 三极管   完整代码12345678910111213#include &lt;avr&#x2F;io.h&gt;int main() &amp;#123;">
+<meta property="og:description" content="适用于从Arduino语言转到AVR C语言编程。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/image/dl.PNG">
 <meta property="og:image" content="http://example.com/image/Pindiagram.PNG">
 <meta property="og:image" content="http://example.com/image/ddrx.PNG">
 <meta property="article:published_time" content="2021-02-16T15:08:14.000Z">
-<meta property="article:modified_time" content="2021-03-03T19:59:19.735Z">
+<meta property="article:modified_time" content="2021-03-03T20:07:31.244Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="avr">
 <meta name="twitter:card" content="summary">
@@ -158,6 +158,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>适用于从Arduino语言转到AVR C语言编程。</p>
+<a id="more"></a>
+
 <hr>
 <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。</p>
 <hr>
@@ -171,7 +173,20 @@
 <li>三极管</li>
 </ol>
 <hr>
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;avr/io.h&gt;</span></span><br><span class="line">int <span class="function"><span class="title">main</span></span>() &#123;</span><br><span class="line">  DDRD = 1 &lt;&lt; <span class="string">DDD3;</span></span><br><span class="line"><span class="string">  DDRC = 0 &lt;&lt; DDC0;</span></span><br><span class="line"><span class="string">  while (1) &#123;</span></span><br><span class="line"><span class="string">    if ( PINC &amp; (1 &lt;&lt; PINC0) ) &#123;</span></span><br><span class="line"><span class="string">      PORTD = 1 &lt;&lt; PD3;// pin is high</span></span><br><span class="line"><span class="string">    &#125; else &#123;</span></span><br><span class="line"><span class="string">      PORTD = 0 &lt;&lt; PD3;  // pin is low</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  return 0;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><pre><code>#include &lt;avr/io.h&gt;
+int main() &#123;
+  DDRD = 1 &lt;&lt; DDD3;
+  DDRC = 0 &lt;&lt; DDC0;
+  while (1) &#123;
+  if ( PINC &amp; (1 &lt;&lt; PINC0) ) &#123;
+      PORTD = 1 &lt;&lt; PD3;// pin is high
+    &#125; else &#123;
+      PORTD = 0 &lt;&lt; PD3;  // pin is low
+    &#125;
+  &#125;
+  return 0;
+&#125;
+</code></pre>
 <hr>
 <h2 id="电路图"><a href="#电路图" class="headerlink" title="电路图"></a>电路图</h2><p><img src="/image/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"></p>
 <p>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
@@ -214,7 +229,7 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃汉堡<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>算了吧，只是做了一点微小的工作<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
                     
@@ -496,7 +511,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">醉后不知天在水，&lt;br&gt;&lt;br&gt;  满船清梦压星河</div>
   	  	
     	</section>
     
