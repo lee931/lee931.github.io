@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>AVR 编程 ATMEGA328P GPIO 基础应用 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="适用于从Arduino语言转到AVR C语言编程。">
+  <meta name="description" content="适用于从Arduino语言转到AVR C语言的编程需求。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AVR 编程 ATMEGA328P GPIO 基础应用">
 <meta property="og:url" content="http://example.com/2021/02/16/Atmega328P-GPIO-AVR/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="适用于从Arduino语言转到AVR C语言编程。">
+<meta property="og:description" content="适用于从Arduino语言转到AVR C语言的编程需求。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/image/dl.PNG">
 <meta property="og:image" content="http://example.com/image/Pindiagram.PNG">
 <meta property="og:image" content="http://example.com/image/ddrx.PNG">
 <meta property="article:published_time" content="2021-02-16T15:08:14.000Z">
-<meta property="article:modified_time" content="2021-03-03T20:15:51.403Z">
+<meta property="article:modified_time" content="2021-03-03T20:42:30.638Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="avr">
 <meta name="twitter:card" content="summary">
@@ -74,6 +74,10 @@
             
     			
     			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'kontakt')" href="javascript:void(0)">联系我</a>
     			
             
 		</nav>
@@ -157,7 +161,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>适用于从Arduino语言转到AVR C语言编程。</p>
+        <p>适用于从Arduino语言转到AVR C语言的编程需求。</p>
 <a id="more"></a>
 
 <hr>
@@ -189,30 +193,30 @@ int main() &#123;
 </code></pre>
 <hr>
 <h2 id="电路图"><a href="#电路图" class="headerlink" title="电路图"></a>电路图</h2><p><img src="/image/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"></p>
-<p>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
+<p>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接，Arduino有足够的电流供给。该电路更适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
 <hr>
 <h2 id="嵌入式的“Hello-World”：点亮一盏LED"><a href="#嵌入式的“Hello-World”：点亮一盏LED" class="headerlink" title="嵌入式的“Hello World”：点亮一盏LED"></a>嵌入式的“Hello World”：点亮一盏LED</h2><p>在Arduino语言中，只需要给某个Pin赋值就可以点亮一盏LED。用C语言编程与Arduino语言编程过程一致。首先看一下如何用Arduino语言点亮一盏灯：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define led 13</span><br><span class="line">void setup() &#123;</span><br><span class="line">  pinMode(led, OUTPUT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void loop() &#123;</span><br><span class="line">  digitalWrite(led, HIGH);   </span><br><span class="line">  delay(1000);      </span><br><span class="line">  digitalWrite(led, LOW);   </span><br><span class="line">  delay(1000);                   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该程序可以在Arduino IDE的示例Blink中查看，其功能是小灯按两秒一个周期的频率闪烁。那么点亮一盏LED需要做什么？首先在“setup()”里初始化Pin的方向（输入or输出），然后给该Pin赋值0（熄灭）/1（点亮）。<br>那么同样的，使用C语言编程，也要完成这两步。Atmega328P的每个Pin有三个寄存器，可以通过配置这些寄存器来实现一些GPIO的功能。这里需要用到两个寄存器：DDxn和PORTxn。除了这两个寄存器，每个Pin还有一个Pinxn寄存器。关于这三个寄存器的详细描述，请参考文献：数据手册的P59。<br>如果你学过51单片机，那么应该对寄存器很了解了。在Atmega上的使用方法上没有区别。如果你并不了解寄存器，关于寄存器，它可以理解为一个开关，一般它的每一位有两个值0/1。假设我们的动作器是个灯，那么我可以通过操控这个开关来改变动作器的状态（点亮or熄灭）。以方向寄存器DDxn为例，这里的“x”代表着你所使用的Pin的Port位置。“n”代表着Pin在该Port上的位置。你可以很容易的在网络上找到Arduino的引脚图，比如下图是在Arduino官网截的：<br><img src="/image/Pindiagram.PNG" alt="Arduino Pin-Diagram"><br>回到点亮一盏LED上，首先需要配置Pin的方向，需要用到寄存器DDxn。当该寄存器为0时，Pin被配置成输入，1则是输出。从上图中可以很容易的找到你所使用的Pin的寄存器位置。以D3为例，它的寄存器位置为PD3。将该Pin配置为输出：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD = 1 &lt;&lt; <span class="string">DDD3;</span></span><br></pre></td></tr></table></figure>
-<p>DDRD（可以理解为Digital Direction D）是整个PortD的方向寄存器，DDD3是Pin-D3的方向寄存器。通常来说我们配置一个Pin的方向，并不希望改变其它Pin的方向。所以需要通过移位运算来给DDD3赋值。当然你也可以用字节操作的方式来给DDD3赋值：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD |= 0x04;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> led 13</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  pinMode(led, OUTPUT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  digitalWrite(led, HIGH);   </span><br><span class="line">  delay(<span class="number">1000</span>);      </span><br><span class="line">  digitalWrite(led, LOW);   </span><br><span class="line">  delay(<span class="number">1000</span>);                   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该程序可以在Arduino IDE的示例Blink中查看，其功能是小灯按两秒一个周期的频率闪烁。那么点亮一盏LED需要做什么？首先在“setup()”里初始化Pin的方向（输入or输出），然后给该Pin赋值0（熄灭）/1（点亮）。<br>那么同样的，使用C语言编程，也要完成这两步。Atmega328P的每个Pin有三个寄存器，可以通过配置这些寄存器来实现一些GPIO的功能。这里需要用到两个寄存器：DDxn和PORTxn。除了这两个寄存器，每个Pin还有一个Pinxn寄存器。关于这三个寄存器的详细描述，请参考文献：数据手册的P59。<br>如果你学过51单片机，那么应该对寄存器很了解了。在Atmega上的使用方法上没有区别。如果你并不了解寄存器，关于寄存器，它可以理解为一个开关，一般它的每一位有两个值0/1。假设动作器是个灯，那么可以通过操控这个开关来改变动作器的状态（点亮or熄灭）。以方向寄存器DDxn为例，这里的“x”代表着你所使用的Pin的Port位置。“n”代表着Pin在该Port上的位置。你可以很容易的在网络上找到Arduino的引脚图，比如下图是在Arduino官网截的：<br><img src="/image/Pindiagram.PNG" alt="Arduino Pin-Diagram"><br>回到点亮一盏LED上，首先需要配置Pin的方向，需要用到寄存器DDxn。当该寄存器为0时，Pin被配置成输入，1则是输出。从上图中可以很容易的找到你所使用的Pin的寄存器位置。以D3为例，它的寄存器位置为PD3。将该Pin配置为输出：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br></pre></td></tr></table></figure>
+<p>DDRD（可以理解为Digital Direction D）是整个PortD的方向寄存器，DDD3是Pin-D3的方向寄存器。通常来说配置一个Pin的方向，并不希望改变其它Pin的方向。所以需要通过移位运算来给DDD3赋值。当然你也可以用字节操作的方式来给DDD3赋值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD |= <span class="number">0x04</span>;</span><br></pre></td></tr></table></figure>
 <p>现在进行第二步，对Pin的高-低电平状态赋值。将该Pin配置为高电平：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PORTD = 1 &lt;&lt; <span class="string">PD3;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PORTD = <span class="number">1</span> &lt;&lt; PD3;</span><br></pre></td></tr></table></figure>
 <p>最后，来实现一下与示例Blink一样的功能：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;avr/io.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;util/delay.h&gt;</span></span><br><span class="line">int <span class="function"><span class="title">main</span></span>() &#123;</span><br><span class="line">DDRD = 1 &lt;&lt; <span class="string">DDD3;</span></span><br><span class="line"><span class="string">  while (1) &#123;</span></span><br><span class="line"><span class="string">      PORTD = 1 &lt;&lt; PD3;// pin is high</span></span><br><span class="line"><span class="string">      _delay_ms(1000);</span></span><br><span class="line"><span class="string">      PORTD = 0 &lt;&lt; PD3;  // pin is low</span></span><br><span class="line"><span class="string">      _delay_ms(1000);*/      </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  return 0;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>注意：在库&lt;util/delay.h&gt;中，delay函数为“_delay_ms(num); ” “ _delay_ns(num); ”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;util/delay.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">      PORTD = <span class="number">1</span> &lt;&lt; PD3;<span class="comment">// pin is high</span></span><br><span class="line">      _delay_ms(<span class="number">1000</span>);</span><br><span class="line">      PORTD = <span class="number">0</span> &lt;&lt; PD3;  <span class="comment">// pin is low</span></span><br><span class="line">      _delay_ms(<span class="number">1000</span>);*/      </span><br><span class="line"></span><br><span class="line">      </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：在库’&lt;util/delay.h&gt;‘中，delay函数为’_delay_ms(num);‘ ’ _delay_ns(num);‘两种。使用Arduino语言中的’delay（num）‘无法实现延时功能。</p>
 <hr>
 <h2 id="使用开关控制LED"><a href="#使用开关控制LED" class="headerlink" title="使用开关控制LED"></a>使用开关控制LED</h2><p>对于配置一个Pin的功能，在手册P60可以找到下图这张表格：<br><img src="/image/ddrx.PNG" alt="Pin寄存器配置表"><br>不同于点亮一盏LED，对于按键，需要将方向配置为输入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRC = 0 &lt;&lt; <span class="string">DDC0;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRC = <span class="number">0</span> &lt;&lt; DDC0;</span><br></pre></td></tr></table></figure>
 <p>读取按键的状态需要用到寄存器“PINx”。该寄存器会返回所选Port的电平状态，高为1，低为0。我们需要对按键的状态进行判断：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( PINC &amp; (1 &lt;&lt; <span class="string">PINC0) ) &#123;&#125;</span></span><br><span class="line"><span class="string">else&#123;&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( PINC &amp; (<span class="number">1</span> &lt;&lt; PINC0) ) &#123;&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
 <p>需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。</p>
 <hr>
 <h2 id="对移位指令的简化"><a href="#对移位指令的简化" class="headerlink" title="对移位指令的简化"></a>对移位指令的简化</h2><p>在AVR编程中，位移指令和逻辑运算会经常用到，不熟悉的话可以在程序顶端添加下列程序对位移指令和逻辑运算进行封装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#define BIT(b) (1&lt;&lt;b)			//提取第b位</span></span><br><span class="line"><span class="comment">#define SET(x,y) (x |= y)		//置1</span></span><br><span class="line"><span class="comment">#define CLEAR(x,y) (x &amp;=~ y)	//清零</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BIT(b) (1&lt;&lt;b)			<span class="comment">//提取第b位</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SET(x,y) (x |= y)		<span class="comment">//置1</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CLEAR(x,y) (x &amp;=~ y)	<span class="comment">//清零</span></span></span><br></pre></td></tr></table></figure>
 <p>然后通过下列方法来配置Pin：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#define LED1 BIT(3)</span></span><br><span class="line">SET(DDRD,LED1);		//输出</span><br><span class="line">CLEAR(PORTD,LED1);		//低电平</span><br><span class="line">SET(PORTD,LED1);		//高电平</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LED1 BIT(3)</span></span><br><span class="line">SET(DDRD,LED1);		<span class="comment">//输出</span></span><br><span class="line">CLEAR(PORTD,LED1);		<span class="comment">//低电平</span></span><br><span class="line">SET(PORTD,LED1);		<span class="comment">//高电平</span></span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>1.Atmega328P数据手册<br><a target="_blank" rel="noopener" href="https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf">链接</a><br>2.Arduino引脚图<br><a target="_blank" rel="noopener" href="https://content.arduino.cc/assets/Pinout-UNOrev3_latest.pdf">链接</a></p>
 <hr>
@@ -429,17 +433,25 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
       
       
     
+      
+      
+      
+    
     
 
     <ul style="width: 70%">
     
     
       
-      <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
       
         
       
-      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'kontakt')"><a href="javascript:void(0)" q-class="active:kontakt">联系我</a></li>
       
         
     </ul>
