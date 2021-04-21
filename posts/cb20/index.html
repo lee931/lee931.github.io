@@ -15,18 +15,18 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="适用于初学者的AVR教程。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/image/Arduino/interrupt/dl.PNG">
-<meta property="og:image" content="http://example.com/image/Arduino/interrupt/zd.PNG">
-<meta property="og:image" content="http://example.com/image/Arduino/interrupt/xlb.PNG%E2%80%9C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E2%80%9D">
+<meta property="og:image" content="http://example.com/image/Arduino/gpio/dl.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/zhongduan.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/xlb.PNG%E2%80%9C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E2%80%9D">
 <meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcicr.PNG">
-<meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcicr.PNG">
-<meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcicr.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcifr.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcmsk1.PNG">
 <meta property="article:published_time" content="2021-03-04T15:08:14.000Z">
-<meta property="article:modified_time" content="2021-04-21T22:54:22.660Z">
+<meta property="article:modified_time" content="2021-04-21T23:09:38.255Z">
 <meta property="article:author" content="lee">
 <meta property="article:tag" content="avr">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/image/Arduino/interrupt/dl.PNG">
+<meta name="twitter:image" content="http://example.com/image/Arduino/gpio/dl.PNG">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -185,16 +185,16 @@
 <h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="keyword">char</span> a = <span class="number">0b01</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">interruptinit</span><span class="params">()</span></span>&#123;</span><br><span class="line">  PCICR=<span class="number">1</span>&lt;&lt;PCIE1;</span><br><span class="line">  PCIFR=<span class="number">1</span>&lt;&lt;PCIF1;</span><br><span class="line">  PCMSK1=(<span class="number">1</span>&lt;&lt;PCINT9);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  DDRB = <span class="number">1</span> &lt;&lt; DDB5;</span><br><span class="line">  PORTB = <span class="number">1</span> &lt;&lt; PB5;</span><br><span class="line">  DDRC = <span class="number">0</span> &lt;&lt; DDC1;</span><br><span class="line">  interruptinit();</span><br><span class="line">  sei();</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    PORTB = a &lt;&lt; PB5;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ISR(PCINT1_vect)&#123;</span><br><span class="line">    <span class="keyword">if</span> (~PINC &amp; (<span class="number">1</span> &lt;&lt; <span class="number">1</span>)) &#123;</span><br><span class="line">      a=~a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="电路图"><a href="#电路图" class="headerlink" title="电路图"></a>电路图</h2><p><img src="/image/Arduino/interrupt/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"><br>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
+<h2 id="电路图"><a href="#电路图" class="headerlink" title="电路图"></a>电路图</h2><p><img src="/image/Arduino/gpio/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"><br>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
 <hr>
-<h2 id="中断和中断向量"><a href="#中断和中断向量" class="headerlink" title="中断和中断向量"></a>中断和中断向量</h2><p><img src="/image/Arduino/interrupt/zd.PNG" alt="中断流程图" title="中断流程图"><br>如上图所示中断的流程大概分为以下几步：</p>
+<h2 id="中断和中断向量"><a href="#中断和中断向量" class="headerlink" title="中断和中断向量"></a>中断和中断向量</h2><p><img src="/image/Arduino/interrupt/zhongduan.PNG" alt="中断流程图" title="中断流程图"><br>如上图所示中断的流程大概分为以下几步：</p>
 <ol>
 <li>达到一定条件触发中断</li>
 <li>根据被触发的中断编号，找到对应的中断向量，再由中断向量指向对应的中断程序</li>
 <li>执行中断程序，结束后返回中断点<br>中断向量可能听起来相对陌生，对于它，可以简单的理解为一个指针。该指针指向中断程序的地址。整个中断的过程可以看作是双重指针的应用。首先当中断被触发后，cup记录当前地址，并将下一步运行的地址被指向中断向量表。然后经过查表，找到所使用的中断向量。再由该向量指向需要被执行的中断程序。执行结束后通过触发中断时记录的地址返回中断点。<br>在一些老式的单片机上，比如瑞萨的M16C。当使用中断时（定时器也是中断的一种），需要手动改写中断向量表来释放中断资源。而Arduino IDE将这一步操作自动执行了，通常来说并不需要更改向量表。如果需要修改中断向量表，请参考数据手册P52。由于这部分内容，新手用不到，老鸟看得懂，在此不做描述。</li>
 </ol>
 <hr>
-<h2 id="Atmega328P上的硬件中断"><a href="#Atmega328P上的硬件中断" class="headerlink" title="Atmega328P上的硬件中断"></a>Atmega328P上的硬件中断</h2><p><img src="/image/Arduino/interrupt/xlb.PNG%E2%80%9C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E2%80%9D" alt="中断向量表"><br>在Atmega328上有两个正常的硬件中断，从中断向量表中可以看到分别是INT0和INT1。这两个中断对应的引脚为PD2和PD3。除了这两个中断外，其余的硬件中断为“Pin-Change Interrupt”,简记为PCINT。<br>那么这两种中断有什么区别呢？通常情况下，每个中断都有自己的中断向量，用来寻址。但是Atmega328p的所有GPIO都可以用作中断引脚，如果每个Pin都有一个自己的中断向量，那么向量表就会变得特别冗长。因此PCINT被设计了出来。不同于一般的硬件中断，PCINT分为三组。每组对应8个Pin，通过寄存器PCICR、PCIFR和PCMSKn（此处以PCMSK1为例）来配置：<br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCICR" title="PCICR"><br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCIFR" title="PCIFR"><br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCMSK1" title="PCMSK1"><br>这三个寄存器很容易记忆，PC代表着Pin-Change。ICR指的是interrupt control register，IFR指的是interrupt flage register，MSK指的是mask（掩码）。PCICR和PCIFR用来使能你所使用的PCINT0/1/2。PCMSK用来选择具体的引脚位置。示例程序使用PC1作为按键接入口，其中断部分的初始化为：</p>
+<h2 id="Atmega328P上的硬件中断"><a href="#Atmega328P上的硬件中断" class="headerlink" title="Atmega328P上的硬件中断"></a>Atmega328P上的硬件中断</h2><p><img src="/image/Arduino/xlb.PNG%E2%80%9C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E2%80%9D" alt="中断向量表"><br>在Atmega328上有两个正常的硬件中断，从中断向量表中可以看到分别是INT0和INT1。这两个中断对应的引脚为PD2和PD3。除了这两个中断外，其余的硬件中断为“Pin-Change Interrupt”,简记为PCINT。<br>那么这两种中断有什么区别呢？通常情况下，每个中断都有自己的中断向量，用来寻址。但是Atmega328p的所有GPIO都可以用作中断引脚，如果每个Pin都有一个自己的中断向量，那么向量表就会变得特别冗长。因此PCINT被设计了出来。不同于一般的硬件中断，PCINT分为三组。每组对应8个Pin，通过寄存器PCICR、PCIFR和PCMSKn（此处以PCMSK1为例）来配置：<br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCICR" title="PCICR"><br><img src="/image/Arduino/interrupt/pcifr.PNG" alt="PCIFR" title="PCIFR"><br><img src="/image/Arduino/interrupt/pcmsk1.PNG" alt="PCMSK1" title="PCMSK1"><br>这三个寄存器很容易记忆，PC代表着Pin-Change。ICR指的是interrupt control register，IFR指的是interrupt flage register，MSK指的是mask（掩码）。PCICR和PCIFR用来使能你所使用的PCINT0/1/2。PCMSK用来选择具体的引脚位置。示例程序使用PC1作为按键接入口，其中断部分的初始化为：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PCICR=<span class="number">1</span>&lt;&lt;PCIE1;</span><br><span class="line">PCIFR=<span class="number">1</span>&lt;&lt;PCIF1;</span><br><span class="line">PCMSK1=(<span class="number">1</span>&lt;&lt;PCINT9);</span><br></pre></td></tr></table></figure>
 <p>在完成初始化之后，即可以开始使用该PCINT了。首先使用<code>sei();</code>来打开中断。然后使用下面的结构编写中断程序：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ISR(你的中断向量)&#123;</span><br><span class="line">    <span class="comment">//你的中断程序</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
