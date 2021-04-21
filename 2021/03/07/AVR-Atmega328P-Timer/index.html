@@ -38,9 +38,9 @@
 <meta property="og:image" content="http://example.com/image/Arduino/timer/FZ.PNG">
 <meta property="og:image" content="http://example.com/image/Arduino/timer/CTC.PNG">
 <meta property="og:image" content="http://example.com/image/Arduino/timer/fastPWMCOM.PNG">
-<meta property="og:image" content="http://example.com/image/Arduino/timer/yjt.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/yjt.PNG">
 <meta property="article:published_time" content="2021-03-07T15:08:14.000Z">
-<meta property="article:modified_time" content="2021-04-21T21:42:07.954Z">
+<meta property="article:modified_time" content="2021-04-21T22:05:32.565Z">
 <meta property="article:author" content="lee">
 <meta property="article:tag" content="avr">
 <meta name="twitter:card" content="summary">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-21 23:42:07" itemprop="dateModified" datetime="2021-04-21T23:42:07+02:00">2021-04-21</time>
+                <time title="Modified: 2021-04-22 00:05:32" itemprop="dateModified" datetime="2021-04-22T00:05:32+02:00">2021-04-22</time>
               </span>
 
           
@@ -283,7 +283,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TIMSK0 = _BV(OCIE0A);</span><br><span class="line">TIFR0 = _BV(OCF0A);</span><br></pre></td></tr></table></figure>
 <p>普通模式与CTC模式配置方法类似，此处不再详述。其与CTC模式的区别在于普通模式没有双通道。且其计数方式为从预赋值TCNTn到MAX。所以不需要配置OCR0A，而需要配置TCNT0。同样以64分频的1ms定时为例，TCNT0为5，即：<code>TCNT0=5</code>。<br>注意：这里不需要减1，因为累加范围为5-255，刚好250次。<br>关于AVR的中断用法和中断向量表，请见<a target="_blank" rel="noopener" href="https://lee931.github.io/2021/03/05/AVR-%E7%BC%96%E7%A8%8B-ATMEGA328P-%E4%B8%AD%E6%96%AD%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/">AVR 编程 ATMEGA328P 中断基础</a>。<br>PWM相对较难，其难点主要在于双通道选通。从模式配置表中可以看到有两个快速PWM模式，其区别在于TOP值和溢出值上。模式3的溢出值是MAX，即0xff。这意味着它的带宽是固定的8bit。模式7的溢出值是OCRA，这意味着它的带宽是不定的，且在该模式下由于没有更多的寄存器来调控占空比，它的占空比恒定位50%。<br><img src="/image/Arduino/timer/fastPWMCOM.PNG" alt="快速PWM选通" title="快速PWM选通"><br>上图是PWM模式下通道A选通的选项。第一项还是禁用。第二项应用在模式7上，生成一个占空比为50%的方波信号，其带宽取决于OCRA。原理是第一个波段高电平，下一个波段反转电平。第三项、第四项用在模式3上，取决于你的方波信号是否需要反转（比如电机倒转）。<br>示例代码旨在实现LED的Diming，所以需要通过改变方波的占空比来达到更改LED亮度的目的。上文已经解释了模式3和模式7的区别，对于LED调光需要使用模式3，因为改变的是占空比而不是带宽。所以寄存器TCCR0A的WGM01和WGM00需要置1。关于选通，选择通道A禁用通道B，且不需要反转，即寄存器WGM01的COM0A1置1。分频与CTC一致，选择64分频。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TCCR0A = (<span class="number">1</span> &lt;&lt; COM0A1) | (<span class="number">1</span> &lt;&lt; WGM01) | (<span class="number">1</span> &lt;&lt; WGM00);</span><br><span class="line">TCCR0B = (<span class="number">1</span> &lt;&lt; CS01) | (<span class="number">1</span> &lt;&lt; CS00);</span><br></pre></td></tr></table></figure>
-<p><img src="/image/Arduino/timer/yjt.PNG" alt="Arduino引脚图" title="Arduino引脚图"><br>上图是Arduino的引脚图，已知开启了Timer0的A通道作为PWM输出引脚，所以要在引脚图上找到OC0A引脚，即PD6。直接将LED和电阻串接到该引脚，LED的Diming电路就接好了。<br>对于Diming的算法，示例提供了一个很简单的动态占空比的算法。原理是亮度变量b（brightness）和控制变量c（control）相加得到即时亮度，当亮度和超过255或者低于0时，反转c的正负号。这样亮度就会在0-&gt;255之间变化。<br>注意：PWM模式是没有中断的，但是可以通过定时器的普通模式和CTC模式来模拟产生PWM方波。</p>
+<p><img src="/image/Arduino/interrupt/yjt.PNG" alt="Arduino引脚图" title="Arduino引脚图"><br>上图是Arduino的引脚图，已知开启了Timer0的A通道作为PWM输出引脚，所以要在引脚图上找到OC0A引脚，即PD6。直接将LED和电阻串接到该引脚，LED的Diming电路就接好了。<br>对于Diming的算法，示例提供了一个很简单的动态占空比的算法。原理是亮度变量b（brightness）和控制变量c（control）相加得到即时亮度，当亮度和超过255或者低于0时，反转c的正负号。这样亮度就会在0-&gt;255之间变化。<br>注意：PWM模式是没有中断的，但是可以通过定时器的普通模式和CTC模式来模拟产生PWM方波。</p>
 <hr>
 <h2 id="关于本文"><a href="#关于本文" class="headerlink" title="关于本文"></a>关于本文</h2><p>Arduino定时器功能挺难找到中文的讲解的，大部分写的都是一知半解（比如很难找到关于Toggle这个单词的解释）。有一篇德语的文章写的非常棒，作者还用示波器对比了定时器各个模式下的波形。如果想完整的了解Arduino的PWM功能，可以区看看：<a target="_blank" rel="noopener" href="https://wolles-elektronikkiste.de/timer-und-pwm-teil-1">Timer und PWM – Teil 1 (8 Bit Timer0/2)</a>。<br>本文还有许多需要完善的地方，因为关于定时器的东西比较多，讲解起来比较复杂。后续可能会在有时间的时候进行修补。再次推荐上面的链接。</p>
 <hr>
