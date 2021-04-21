@@ -6,15 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Tag: avr | Hexo</title>
+  <title>AVR 编程 ATMEGA328P GPIO 基础应用 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/tags/avr/index.html">
+  <meta name="description" content="适用于刚从Arduino语言转到AVR C语言编程的人。##目标理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。  ##使用到的硬件  Arduino uno 面包板 杜邦线 电阻 开关 LED 三极管   ##完整代码 12345678910111213#include &lt;avr&#x2F;io.h&gt;int main">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AVR 编程 ATMEGA328P GPIO 基础应用">
+<meta property="og:url" content="http://example.com/posts/aa5/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="适用于刚从Arduino语言转到AVR C语言编程的人。##目标理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。  ##使用到的硬件  Arduino uno 面包板 杜邦线 电阻 开关 LED 三极管   ##完整代码 12345678910111213#include &lt;avr&#x2F;io.h&gt;int main">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/Arduino/gpio/dl.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/Pindiagram.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/gpio/ddrx.PNG">
+<meta property="article:published_time" content="2021-02-16T15:08:14.000Z">
+<meta property="article:modified_time" content="2021-04-21T22:47:14.959Z">
 <meta property="article:author" content="lee">
+<meta property="article:tag" content="avr">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/Arduino/gpio/dl.PNG">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -134,112 +143,103 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Arduinogpio" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/posts/40514/" class="archive-article-date">
-  	<time datetime="2021-03-07T15:08:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-07</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/posts/40514/">AVR 编程 ATMEGA328P Timer基础应用</a>
+    <h1 class="article-title" itemprop="name">
+      AVR 编程 ATMEGA328P GPIO 基础应用
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">avr</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/posts/cb20/" class="archive-article-date">
-  	<time datetime="2021-03-04T15:08:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/posts/cb20/">AVR 编程 ATMEGA328P 中断基础应用</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">avr</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/posts/aa5/" class="archive-article-date">
+        
+        <a href="/posts/aa5/" class="archive-article-date">
   	<time datetime="2021-02-16T15:08:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-16</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/posts/aa5/">AVR 编程 ATMEGA328P GPIO 基础应用</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="适用于刚从Arduino语言转到AVR-C语言编程的人。"><a href="#适用于刚从Arduino语言转到AVR-C语言编程的人。" class="headerlink" title="适用于刚从Arduino语言转到AVR C语言编程的人。"></a>适用于刚从Arduino语言转到AVR C语言编程的人。</h2><p>##目标<br>理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。</p>
+<hr>
+<p>##使用到的硬件</p>
+<ol>
+<li>Arduino uno</li>
+<li>面包板</li>
+<li>杜邦线</li>
+<li>电阻</li>
+<li>开关</li>
+<li>LED</li>
+<li>三极管</li>
+</ol>
+<hr>
+<p>##完整代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br><span class="line">  DDRC = <span class="number">0</span> &lt;&lt; DDC0;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( PINC &amp; (<span class="number">1</span> &lt;&lt; PINC0) ) &#123;</span><br><span class="line">      PORTD = <span class="number">1</span> &lt;&lt; PD3;<span class="comment">// pin is high</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      PORTD = <span class="number">0</span> &lt;&lt; PD3;  <span class="comment">// pin is low</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>##电路图<br><img src="/image/Arduino/gpio/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"><br>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
+<hr>
+<p>##嵌入式的“Hello World”，点亮一盏LED<br>在Arduino语言中，只需要给某个Pin赋值就可以点亮一盏LED。用C语言编程与Arduino语言编程过程一致。首先看一下如何用Arduino语言点亮一盏灯：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> led 13</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  pinMode(led, OUTPUT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  digitalWrite(led, HIGH);   </span><br><span class="line">  delay(<span class="number">1000</span>);      </span><br><span class="line">  digitalWrite(led, LOW);   </span><br><span class="line">  delay(<span class="number">1000</span>);                   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该程序可以在Arduino IDE的示例Blink中查看，其功能是小灯按两秒一个周期的频率闪烁。那么点亮一盏LED需要做什么？首先在“setup()”里初始化Pin的方向（输入or输出），然后给该Pin赋值0（熄灭）/1（点亮）。<br>那么同样的，使用C语言编程，也要完成这两步。Atmega328P的每个Pin有三个寄存器，可以通过配置这些寄存器来实现一些GPIO的功能。这里需要用到两个寄存器：DDxn和PORTxn。除了这两个寄存器，每个Pin还有一个Pinxn寄存器。关于这三个寄存器的详细描述，请参考文献：数据手册的P59。<br>如果你学过51单片机，那么应该对寄存器很了解了。在Atmega上的使用方法上没有区别。如果你并不了解寄存器，关于寄存器，它可以理解为一个开关，一般它的每一位有两个值0/1。假设我们的动作器是个灯，那么我可以通过操控这个开关来改变动作器的状态（点亮or熄灭）。以方向寄存器DDxn为例，这里的“x”代表着你所使用的Pin的Port位置。“n”代表着Pin在该Port上的位置。你可以很容易的在网络上找到Arduino的引脚图，比如下图是在Arduino官网截的：<br><img src="/image/Arduino/Pindiagram.PNG" alt="Arduino Pin-Diagram" title="Arduino Pin-Diagram"><br>回到点亮一盏LED上，首先需要配置Pin的方向，需要用到寄存器DDxn。当该寄存器为0时，Pin被配置成输入，1则是输出。从上图中可以很容易的找到你所使用的Pin的寄存器位置。以D3为例，它的寄存器位置为PD3。将该Pin配置为输出：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br></pre></td></tr></table></figure>
+<p>DDRD（可以理解为Digital Direction D）是整个PortD的方向寄存器，DDD3是Pin-D3的方向寄存器。通常来说我们配置一个Pin的方向，并不希望改变其它Pin的方向。所以需要通过移位运算来给DDD3赋值。当然你也可以用字节操作的方式来给DDD3赋值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRD |= <span class="number">0x04</span>;</span><br></pre></td></tr></table></figure>
+<p>现在进行第二步，对Pin的高-低电平状态赋值。将该Pin配置为高电平：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PORTD = <span class="number">1</span> &lt;&lt; PD3;</span><br></pre></td></tr></table></figure>
+<p>最后，来实现一下与示例Blink一样的功能：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;util/delay.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">      PORTD = <span class="number">1</span> &lt;&lt; PD3;<span class="comment">// pin is high</span></span><br><span class="line">      _delay_ms(<span class="number">1000</span>);</span><br><span class="line">      PORTD = <span class="number">0</span> &lt;&lt; PD3;  <span class="comment">// pin is low</span></span><br><span class="line">      _delay_ms(<span class="number">1000</span>);*/      </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注意：在库-lt-util-delay-h-gt-中，delay函数为“-delay-ms-num-”-“-delay-ns-num-”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。"><a href="#注意：在库-lt-util-delay-h-gt-中，delay函数为“-delay-ms-num-”-“-delay-ns-num-”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。" class="headerlink" title="注意：在库&lt;util/delay.h&gt;中，delay函数为“_delay_ms(num); ” “ _delay_ns(num); ”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。"></a>注意：在库&lt;util/delay.h&gt;中，delay函数为“_delay_ms(num); ” “ _delay_ns(num); ”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。</h2><p>##使用开关控制LED<br>对于配置一个Pin的功能，在手册P60可以找到下图这张表格：<br><img src="/image/Arduino/gpio/ddrx.PNG" alt="Pin寄存器配置表" title="Pin寄存器配置表"><br>不同于点亮一盏LED，对于按键，需要将方向配置为输入：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDRC = <span class="number">0</span> &lt;&lt; DDC0;</span><br></pre></td></tr></table></figure>
+<p>读取按键的状态需要用到寄存器“PINx”。该寄存器会返回所选Port的电平状态，高为1，低为0。我们需要对按键的状态进行判断：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( PINC &amp; (<span class="number">1</span> &lt;&lt; PINC0) ) &#123;&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。"><a href="#需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。" class="headerlink" title="需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。"></a>需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。</h2><p>##对移位指令的简化<br>在AVR编程中，位移指令和逻辑运算会经常用到，不熟悉的话可以在程序顶端添加下列程序对位移指令和逻辑运算进行封装：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BIT(b) (1&lt;&lt;b)			<span class="comment">//提取第b位</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SET(x,y) (x |= y)		<span class="comment">//置1</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CLEAR(x,y) (x &amp;=~ y)	<span class="comment">//清零</span></span></span><br></pre></td></tr></table></figure>
+<p>然后通过下列方法来配置Pin：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LED1 BIT(3)</span></span><br><span class="line">SET(DDRD,LED1);		<span class="comment">//输出</span></span><br><span class="line">CLEAR(PORTD,LED1);		<span class="comment">//低电平</span></span><br><span class="line">SET(PORTD,LED1);		<span class="comment">//高电平</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>##参考文献<br>1.Atmega328P数据手册<br><a target="_blank" rel="noopener" href="https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf">链接</a><br>2.Arduino引脚图<br><a target="_blank" rel="noopener" href="https://content.arduino.cc/assets/Pinout-UNOrev3_latest.pdf">链接</a></p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>算了吧兄弟，我只是做了点微小的工作<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/tx.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/tx.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -251,19 +251,123 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/posts/aa5/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/posts/cb20/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          AVR 编程 ATMEGA328P 中断基础应用
+        
+      </div>
+    </a>
   
   
-    </div></section>
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E4%BA%8E%E5%88%9A%E4%BB%8EArduino%E8%AF%AD%E8%A8%80%E8%BD%AC%E5%88%B0AVR-C%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E7%9A%84%E4%BA%BA%E3%80%82"><span class="toc-number">1.</span> <span class="toc-text">适用于刚从Arduino语言转到AVR C语言编程的人。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%9C%A8%E5%BA%93-lt-util-delay-h-gt-%E4%B8%AD%EF%BC%8Cdelay%E5%87%BD%E6%95%B0%E4%B8%BA%E2%80%9C-delay-ms-num-%E2%80%9D-%E2%80%9C-delay-ns-num-%E2%80%9D%E4%B8%A4%E7%A7%8D%E3%80%82%E4%BD%BF%E7%94%A8Arduino%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E2%80%9Cdelay%EF%BC%88num%EF%BC%89%E2%80%9D%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%BB%B6%E6%97%B6%E5%8A%9F%E8%83%BD%E3%80%82"><span class="toc-number">2.</span> <span class="toc-text">注意：在库&lt;util&#x2F;delay.h&gt;中，delay函数为“_delay_ms(num); ” “ _delay_ns(num); ”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF%EF%BC%8CPINx%E5%AF%84%E5%AD%98%E5%99%A8%E6%98%AF%E6%95%B4%E4%B8%AAPortC%E7%9A%84Pin-Status%E5%AF%84%E5%AD%98%E5%99%A8%E3%80%82%E9%9C%80%E8%A6%81%E9%80%9A%E8%BF%87%E7%A7%BB%E4%BD%8D%E6%8C%87%E4%BB%A4%E5%92%8C%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E6%9D%A5%E6%8F%90%E5%8F%96%E6%89%80%E9%80%89Pin%E7%9A%84%E7%94%B5%E5%B9%B3%E7%8A%B6%E6%80%81%E3%80%82"><span class="toc-number">3.</span> <span class="toc-text">需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -286,9 +390,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

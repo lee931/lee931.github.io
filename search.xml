@@ -45,4 +45,94 @@
         <tag>avr</tag>
       </tags>
   </entry>
+  <entry>
+    <title>AVR 编程 ATMEGA328P GPIO 基础应用</title>
+    <url>/posts/aa5/</url>
+    <content><![CDATA[<h2 id="适用于刚从Arduino语言转到AVR-C语言编程的人。"><a href="#适用于刚从Arduino语言转到AVR-C语言编程的人。" class="headerlink" title="适用于刚从Arduino语言转到AVR C语言编程的人。"></a>适用于刚从Arduino语言转到AVR C语言编程的人。</h2><p>##目标<br>理解AVR架构下GPIO的使用，即输入和输出。理解寄存器赋值和Arduino语言赋值的区别。实现用开关控制LED的点亮和熄灭。</p>
+<hr>
+<p>##使用到的硬件</p>
+<ol>
+<li>Arduino uno</li>
+<li>面包板</li>
+<li>杜邦线</li>
+<li>电阻</li>
+<li>开关</li>
+<li>LED</li>
+<li>三极管</li>
+</ol>
+<hr>
+<p>##完整代码</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br><span class="line">  DDRC = <span class="number">0</span> &lt;&lt; DDC0;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( PINC &amp; (<span class="number">1</span> &lt;&lt; PINC0) ) &#123;</span><br><span class="line">      PORTD = <span class="number">1</span> &lt;&lt; PD3;<span class="comment">// pin is high</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      PORTD = <span class="number">0</span> &lt;&lt; PD3;  <span class="comment">// pin is low</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>##电路图<br><img src="/image/Arduino/gpio/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"><br>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
+<hr>
+<p>##嵌入式的“Hello World”，点亮一盏LED<br>在Arduino语言中，只需要给某个Pin赋值就可以点亮一盏LED。用C语言编程与Arduino语言编程过程一致。首先看一下如何用Arduino语言点亮一盏灯：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> led 13</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  pinMode(led, OUTPUT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  digitalWrite(led, HIGH);   </span><br><span class="line">  delay(<span class="number">1000</span>);      </span><br><span class="line">  digitalWrite(led, LOW);   </span><br><span class="line">  delay(<span class="number">1000</span>);                   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该程序可以在Arduino IDE的示例Blink中查看，其功能是小灯按两秒一个周期的频率闪烁。那么点亮一盏LED需要做什么？首先在“setup()”里初始化Pin的方向（输入or输出），然后给该Pin赋值0（熄灭）/1（点亮）。<br>那么同样的，使用C语言编程，也要完成这两步。Atmega328P的每个Pin有三个寄存器，可以通过配置这些寄存器来实现一些GPIO的功能。这里需要用到两个寄存器：DDxn和PORTxn。除了这两个寄存器，每个Pin还有一个Pinxn寄存器。关于这三个寄存器的详细描述，请参考文献：数据手册的P59。<br>如果你学过51单片机，那么应该对寄存器很了解了。在Atmega上的使用方法上没有区别。如果你并不了解寄存器，关于寄存器，它可以理解为一个开关，一般它的每一位有两个值0/1。假设我们的动作器是个灯，那么我可以通过操控这个开关来改变动作器的状态（点亮or熄灭）。以方向寄存器DDxn为例，这里的“x”代表着你所使用的Pin的Port位置。“n”代表着Pin在该Port上的位置。你可以很容易的在网络上找到Arduino的引脚图，比如下图是在Arduino官网截的：<br><img src="/image/Arduino/Pindiagram.PNG" alt="Arduino Pin-Diagram" title="Arduino Pin-Diagram"><br>回到点亮一盏LED上，首先需要配置Pin的方向，需要用到寄存器DDxn。当该寄存器为0时，Pin被配置成输入，1则是输出。从上图中可以很容易的找到你所使用的Pin的寄存器位置。以D3为例，它的寄存器位置为PD3。将该Pin配置为输出：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br></pre></td></tr></table></figure>
+<p>DDRD（可以理解为Digital Direction D）是整个PortD的方向寄存器，DDD3是Pin-D3的方向寄存器。通常来说我们配置一个Pin的方向，并不希望改变其它Pin的方向。所以需要通过移位运算来给DDD3赋值。当然你也可以用字节操作的方式来给DDD3赋值：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">DDRD |= <span class="number">0x04</span>;</span><br></pre></td></tr></table></figure>
+<p>现在进行第二步，对Pin的高-低电平状态赋值。将该Pin配置为高电平：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">PORTD = <span class="number">1</span> &lt;&lt; PD3;</span><br></pre></td></tr></table></figure>
+<p>最后，来实现一下与示例Blink一样的功能：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;util/delay.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">DDRD = <span class="number">1</span> &lt;&lt; DDD3;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">      PORTD = <span class="number">1</span> &lt;&lt; PD3;<span class="comment">// pin is high</span></span><br><span class="line">      _delay_ms(<span class="number">1000</span>);</span><br><span class="line">      PORTD = <span class="number">0</span> &lt;&lt; PD3;  <span class="comment">// pin is low</span></span><br><span class="line">      _delay_ms(<span class="number">1000</span>);*/      </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注意：在库-lt-util-delay-h-gt-中，delay函数为“-delay-ms-num-”-“-delay-ns-num-”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。"><a href="#注意：在库-lt-util-delay-h-gt-中，delay函数为“-delay-ms-num-”-“-delay-ns-num-”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。" class="headerlink" title="注意：在库&lt;util/delay.h&gt;中，delay函数为“_delay_ms(num); ” “ _delay_ns(num); ”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。"></a>注意：在库&lt;util/delay.h&gt;中，delay函数为“_delay_ms(num); ” “ _delay_ns(num); ”两种。使用Arduino语言中的“delay（num）”无法实现延时功能。</h2><p>##使用开关控制LED<br>对于配置一个Pin的功能，在手册P60可以找到下图这张表格：<br><img src="/image/Arduino/gpio/ddrx.PNG" alt="Pin寄存器配置表" title="Pin寄存器配置表"><br>不同于点亮一盏LED，对于按键，需要将方向配置为输入：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">DDRC = <span class="number">0</span> &lt;&lt; DDC0;</span><br></pre></td></tr></table></figure>
+<p>读取按键的状态需要用到寄存器“PINx”。该寄存器会返回所选Port的电平状态，高为1，低为0。我们需要对按键的状态进行判断：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> ( PINC &amp; (<span class="number">1</span> &lt;&lt; PINC0) ) &#123;&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。"><a href="#需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。" class="headerlink" title="需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。"></a>需要注意的是，PINx寄存器是整个PortC的Pin-Status寄存器。需要通过移位指令和逻辑运算来提取所选Pin的电平状态。</h2><p>##对移位指令的简化<br>在AVR编程中，位移指令和逻辑运算会经常用到，不熟悉的话可以在程序顶端添加下列程序对位移指令和逻辑运算进行封装：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BIT(b) (1&lt;&lt;b)			<span class="comment">//提取第b位</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SET(x,y) (x |= y)		<span class="comment">//置1</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CLEAR(x,y) (x &amp;=~ y)	<span class="comment">//清零</span></span></span><br></pre></td></tr></table></figure>
+<p>然后通过下列方法来配置Pin：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LED1 BIT(3)</span></span><br><span class="line">SET(DDRD,LED1);		<span class="comment">//输出</span></span><br><span class="line">CLEAR(PORTD,LED1);		<span class="comment">//低电平</span></span><br><span class="line">SET(PORTD,LED1);		<span class="comment">//高电平</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>##参考文献<br>1.Atmega328P数据手册<br><a href="https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf">链接</a><br>2.Arduino引脚图<br><a href="https://content.arduino.cc/assets/Pinout-UNOrev3_latest.pdf">链接</a></p>
+]]></content>
+      <tags>
+        <tag>avr</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>AVR 编程 ATMEGA328P 中断基础应用</title>
+    <url>/posts/cb20/</url>
+    <content><![CDATA[<p>适用于初学者的AVR教程。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>理解中断的定义，学会封装函数。通过中断使按键可以控制LED的状态。</p>
+<hr>
+<h2 id="使用到的硬件"><a href="#使用到的硬件" class="headerlink" title="使用到的硬件"></a>使用到的硬件</h2><ol>
+<li>Arduino uno</li>
+<li>面包板</li>
+<li>杜邦线</li>
+<li>电阻</li>
+<li>开关</li>
+<li>LED</li>
+<li>三极管</li>
+</ol>
+<hr>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="keyword">char</span> a = <span class="number">0b01</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">interruptinit</span><span class="params">()</span></span>&#123;</span><br><span class="line">  PCICR=<span class="number">1</span>&lt;&lt;PCIE1;</span><br><span class="line">  PCIFR=<span class="number">1</span>&lt;&lt;PCIF1;</span><br><span class="line">  PCMSK1=(<span class="number">1</span>&lt;&lt;PCINT9);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  DDRB = <span class="number">1</span> &lt;&lt; DDB5;</span><br><span class="line">  PORTB = <span class="number">1</span> &lt;&lt; PB5;</span><br><span class="line">  DDRC = <span class="number">0</span> &lt;&lt; DDC1;</span><br><span class="line">  interruptinit();</span><br><span class="line">  sei();</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    PORTB = a &lt;&lt; PB5;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ISR(PCINT1_vect)&#123;</span><br><span class="line">    <span class="keyword">if</span> (~PINC &amp; (<span class="number">1</span> &lt;&lt; <span class="number">1</span>)) &#123;</span><br><span class="line">      a=~a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="电路图"><a href="#电路图" class="headerlink" title="电路图"></a>电路图</h2><p><img src="/image/Arduino/interrupt/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"><br>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
+<hr>
+<h2 id="中断和中断向量"><a href="#中断和中断向量" class="headerlink" title="中断和中断向量"></a>中断和中断向量</h2><p><img src="/image/Arduino/interrupt/zd.PNG" alt="中断流程图" title="中断流程图"><br>如上图所示中断的流程大概分为以下几步：</p>
+<ol>
+<li>达到一定条件触发中断</li>
+<li>根据被触发的中断编号，找到对应的中断向量，再由中断向量指向对应的中断程序</li>
+<li>执行中断程序，结束后返回中断点<br>中断向量可能听起来相对陌生，对于它，可以简单的理解为一个指针。该指针指向中断程序的地址。整个中断的过程可以看作是双重指针的应用。首先当中断被触发后，cup记录当前地址，并将下一步运行的地址被指向中断向量表。然后经过查表，找到所使用的中断向量。再由该向量指向需要被执行的中断程序。执行结束后通过触发中断时记录的地址返回中断点。<br>在一些老式的单片机上，比如瑞萨的M16C。当使用中断时（定时器也是中断的一种），需要手动改写中断向量表来释放中断资源。而Arduino IDE将这一步操作自动执行了，通常来说并不需要更改向量表。如果需要修改中断向量表，请参考数据手册P52。由于这部分内容，新手用不到，老鸟看得懂，在此不做描述。</li>
+</ol>
+<hr>
+<h2 id="Atmega328P上的硬件中断"><a href="#Atmega328P上的硬件中断" class="headerlink" title="Atmega328P上的硬件中断"></a>Atmega328P上的硬件中断</h2><p><img src="/image/Arduino/interrupt/xlb.PNG%E2%80%9C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E2%80%9D" alt="中断向量表"><br>在Atmega328上有两个正常的硬件中断，从中断向量表中可以看到分别是INT0和INT1。这两个中断对应的引脚为PD2和PD3。除了这两个中断外，其余的硬件中断为“Pin-Change Interrupt”,简记为PCINT。<br>那么这两种中断有什么区别呢？通常情况下，每个中断都有自己的中断向量，用来寻址。但是Atmega328p的所有GPIO都可以用作中断引脚，如果每个Pin都有一个自己的中断向量，那么向量表就会变得特别冗长。因此PCINT被设计了出来。不同于一般的硬件中断，PCINT分为三组。每组对应8个Pin，通过寄存器PCICR、PCIFR和PCMSKn（此处以PCMSK1为例）来配置：<br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCICR" title="PCICR"><br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCIFR" title="PCIFR"><br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCMSK1" title="PCMSK1"><br>这三个寄存器很容易记忆，PC代表着Pin-Change。ICR指的是interrupt control register，IFR指的是interrupt flage register，MSK指的是mask（掩码）。PCICR和PCIFR用来使能你所使用的PCINT0/1/2。PCMSK用来选择具体的引脚位置。示例程序使用PC1作为按键接入口，其中断部分的初始化为：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">PCICR=<span class="number">1</span>&lt;&lt;PCIE1;</span><br><span class="line">PCIFR=<span class="number">1</span>&lt;&lt;PCIF1;</span><br><span class="line">PCMSK1=(<span class="number">1</span>&lt;&lt;PCINT9);</span><br></pre></td></tr></table></figure>
+<p>在完成初始化之后，即可以开始使用该PCINT了。首先使用<code>sei();</code>来打开中断。然后使用下面的结构编写中断程序：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">ISR(你的中断向量)&#123;</span><br><span class="line">    <span class="comment">//你的中断程序</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，由于PCINT0/1/2的每个中断向量都对应着多个Pin，因此还需要在中断程序中对于具体Pin的位置进行判断。比如，示例中更改参数a的状态：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (~PINC &amp; (<span class="number">1</span> &lt;&lt; <span class="number">1</span>)) &#123;</span><br><span class="line">  a=~a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再说回普通的硬件中断，INT0和INT1。他们初始化使用的寄存器为EICRA、EIMSK和EIFR。其初始化方法与PCINT类似，详细描述可以参考手册P54。与PCINT的区别在于由于具有具有单独的中断向量，INT0和INT1不需要通过额外的判断来确定具体的Pin的位置。且通过配置寄存器EICRA，可以选择4种中断被触发的方式：高电平触发，低电平触发，上升沿触发和下降沿触发。而在PCINT中，触发方式需要程序员在判断Pin的位置时自行编写。示例程序中的触发方式为低电平触发。<br>Tips：<br>对于函数<code>sei();</code>，有一个功能相反的函数<code>cli();</code>。该函数的功能是禁用所有中断。当你有一段程序不想被仍和中断打扰时，可以在该段程序前添加函数<code>cli();</code>、末尾添加函数<code>sei();</code>来在该段程序中屏蔽所有中断功能。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>1.Atmega328P数据手册<br><a href="https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf">链接</a><br>2.Arduino引脚图<br><a href="https://content.arduino.cc/assets/Pinout-UNOrev3_latest.pdf">链接</a></p>
+]]></content>
+      <tags>
+        <tag>avr</tag>
+      </tags>
+  </entry>
 </search>

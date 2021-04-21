@@ -6,15 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Tag: avr | Hexo</title>
+  <title>AVR 编程 ATMEGA328P 中断基础应用 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/tags/avr/index.html">
+  <meta name="description" content="适用于初学者的AVR教程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AVR 编程 ATMEGA328P 中断基础应用">
+<meta property="og:url" content="http://example.com/posts/cb20/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="适用于初学者的AVR教程。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/dl.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/zd.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/xlb.PNG%E2%80%9C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E2%80%9D">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcicr.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcicr.PNG">
+<meta property="og:image" content="http://example.com/image/Arduino/interrupt/pcicr.PNG">
+<meta property="article:published_time" content="2021-03-04T15:08:14.000Z">
+<meta property="article:modified_time" content="2021-04-21T22:47:14.967Z">
 <meta property="article:author" content="lee">
+<meta property="article:tag" content="avr">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/Arduino/interrupt/dl.PNG">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -134,74 +146,101 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-interruptArduino" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/posts/40514/" class="archive-article-date">
-  	<time datetime="2021-03-07T15:08:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-07</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/posts/40514/">AVR 编程 ATMEGA328P Timer基础应用</a>
+    <h1 class="article-title" itemprop="name">
+      AVR 编程 ATMEGA328P 中断基础应用
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">avr</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/posts/cb20/" class="archive-article-date">
+        
+        <a href="/posts/cb20/" class="archive-article-date">
   	<time datetime="2021-03-04T15:08:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-04</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/posts/cb20/">AVR 编程 ATMEGA328P 中断基础应用</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>适用于初学者的AVR教程。</p>
+<span id="more"></span>
 
-        <div class="article-info info-on-right">
-          
+<hr>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>理解中断的定义，学会封装函数。通过中断使按键可以控制LED的状态。</p>
+<hr>
+<h2 id="使用到的硬件"><a href="#使用到的硬件" class="headerlink" title="使用到的硬件"></a>使用到的硬件</h2><ol>
+<li>Arduino uno</li>
+<li>面包板</li>
+<li>杜邦线</li>
+<li>电阻</li>
+<li>开关</li>
+<li>LED</li>
+<li>三极管</li>
+</ol>
+<hr>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;avr/io.h&gt;</span></span></span><br><span class="line"><span class="keyword">char</span> a = <span class="number">0b01</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">interruptinit</span><span class="params">()</span></span>&#123;</span><br><span class="line">  PCICR=<span class="number">1</span>&lt;&lt;PCIE1;</span><br><span class="line">  PCIFR=<span class="number">1</span>&lt;&lt;PCIF1;</span><br><span class="line">  PCMSK1=(<span class="number">1</span>&lt;&lt;PCINT9);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  DDRB = <span class="number">1</span> &lt;&lt; DDB5;</span><br><span class="line">  PORTB = <span class="number">1</span> &lt;&lt; PB5;</span><br><span class="line">  DDRC = <span class="number">0</span> &lt;&lt; DDC1;</span><br><span class="line">  interruptinit();</span><br><span class="line">  sei();</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    PORTB = a &lt;&lt; PB5;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ISR(PCINT1_vect)&#123;</span><br><span class="line">    <span class="keyword">if</span> (~PINC &amp; (<span class="number">1</span> &lt;&lt; <span class="number">1</span>)) &#123;</span><br><span class="line">      a=~a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="电路图"><a href="#电路图" class="headerlink" title="电路图"></a>电路图</h2><p><img src="/image/Arduino/interrupt/dl.PNG" alt="开关灯电路电路图" title="开关灯电路电路图"><br>需要注意的是，这里关于LED部分使用了一个三极管开关电路。如果你没有三极管，可以直接将Pin和LED及电阻连接。Arduino有足够的电流供给，该电路适用于弱电流GPIO的开发板，比如Jetson Nano。</p>
+<hr>
+<h2 id="中断和中断向量"><a href="#中断和中断向量" class="headerlink" title="中断和中断向量"></a>中断和中断向量</h2><p><img src="/image/Arduino/interrupt/zd.PNG" alt="中断流程图" title="中断流程图"><br>如上图所示中断的流程大概分为以下几步：</p>
+<ol>
+<li>达到一定条件触发中断</li>
+<li>根据被触发的中断编号，找到对应的中断向量，再由中断向量指向对应的中断程序</li>
+<li>执行中断程序，结束后返回中断点<br>中断向量可能听起来相对陌生，对于它，可以简单的理解为一个指针。该指针指向中断程序的地址。整个中断的过程可以看作是双重指针的应用。首先当中断被触发后，cup记录当前地址，并将下一步运行的地址被指向中断向量表。然后经过查表，找到所使用的中断向量。再由该向量指向需要被执行的中断程序。执行结束后通过触发中断时记录的地址返回中断点。<br>在一些老式的单片机上，比如瑞萨的M16C。当使用中断时（定时器也是中断的一种），需要手动改写中断向量表来释放中断资源。而Arduino IDE将这一步操作自动执行了，通常来说并不需要更改向量表。如果需要修改中断向量表，请参考数据手册P52。由于这部分内容，新手用不到，老鸟看得懂，在此不做描述。</li>
+</ol>
+<hr>
+<h2 id="Atmega328P上的硬件中断"><a href="#Atmega328P上的硬件中断" class="headerlink" title="Atmega328P上的硬件中断"></a>Atmega328P上的硬件中断</h2><p><img src="/image/Arduino/interrupt/xlb.PNG%E2%80%9C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E2%80%9D" alt="中断向量表"><br>在Atmega328上有两个正常的硬件中断，从中断向量表中可以看到分别是INT0和INT1。这两个中断对应的引脚为PD2和PD3。除了这两个中断外，其余的硬件中断为“Pin-Change Interrupt”,简记为PCINT。<br>那么这两种中断有什么区别呢？通常情况下，每个中断都有自己的中断向量，用来寻址。但是Atmega328p的所有GPIO都可以用作中断引脚，如果每个Pin都有一个自己的中断向量，那么向量表就会变得特别冗长。因此PCINT被设计了出来。不同于一般的硬件中断，PCINT分为三组。每组对应8个Pin，通过寄存器PCICR、PCIFR和PCMSKn（此处以PCMSK1为例）来配置：<br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCICR" title="PCICR"><br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCIFR" title="PCIFR"><br><img src="/image/Arduino/interrupt/pcicr.PNG" alt="PCMSK1" title="PCMSK1"><br>这三个寄存器很容易记忆，PC代表着Pin-Change。ICR指的是interrupt control register，IFR指的是interrupt flage register，MSK指的是mask（掩码）。PCICR和PCIFR用来使能你所使用的PCINT0/1/2。PCMSK用来选择具体的引脚位置。示例程序使用PC1作为按键接入口，其中断部分的初始化为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PCICR=<span class="number">1</span>&lt;&lt;PCIE1;</span><br><span class="line">PCIFR=<span class="number">1</span>&lt;&lt;PCIF1;</span><br><span class="line">PCMSK1=(<span class="number">1</span>&lt;&lt;PCINT9);</span><br></pre></td></tr></table></figure>
+<p>在完成初始化之后，即可以开始使用该PCINT了。首先使用<code>sei();</code>来打开中断。然后使用下面的结构编写中断程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ISR(你的中断向量)&#123;</span><br><span class="line">    <span class="comment">//你的中断程序</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，由于PCINT0/1/2的每个中断向量都对应着多个Pin，因此还需要在中断程序中对于具体Pin的位置进行判断。比如，示例中更改参数a的状态：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (~PINC &amp; (<span class="number">1</span> &lt;&lt; <span class="number">1</span>)) &#123;</span><br><span class="line">  a=~a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再说回普通的硬件中断，INT0和INT1。他们初始化使用的寄存器为EICRA、EIMSK和EIFR。其初始化方法与PCINT类似，详细描述可以参考手册P54。与PCINT的区别在于由于具有具有单独的中断向量，INT0和INT1不需要通过额外的判断来确定具体的Pin的位置。且通过配置寄存器EICRA，可以选择4种中断被触发的方式：高电平触发，低电平触发，上升沿触发和下降沿触发。而在PCINT中，触发方式需要程序员在判断Pin的位置时自行编写。示例程序中的触发方式为低电平触发。<br>Tips：<br>对于函数<code>sei();</code>，有一个功能相反的函数<code>cli();</code>。该函数的功能是禁用所有中断。当你有一段程序不想被仍和中断打扰时，可以在该段程序前添加函数<code>cli();</code>、末尾添加函数<code>sei();</code>来在该段程序中屏蔽所有中断功能。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>1.Atmega328P数据手册<br><a target="_blank" rel="noopener" href="https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf">链接</a><br>2.Arduino引脚图<br><a target="_blank" rel="noopener" href="https://content.arduino.cc/assets/Pinout-UNOrev3_latest.pdf">链接</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>算了吧兄弟，我只是做了点微小的工作<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/tx.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/tx.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -213,57 +252,128 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/posts/cb20/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/posts/aa5/" class="archive-article-date">
-  	<time datetime="2021-02-16T15:08:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-16</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/posts/40514/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          AVR 编程 ATMEGA328P Timer基础应用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/posts/aa5/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">AVR 编程 ATMEGA328P GPIO 基础应用</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/posts/aa5/">AVR 编程 ATMEGA328P GPIO 基础应用</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">avr</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E7%A1%AC%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">使用到的硬件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">完整代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E8%B7%AF%E5%9B%BE"><span class="toc-number">4.</span> <span class="toc-text">电路图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%92%8C%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F"><span class="toc-number">5.</span> <span class="toc-text">中断和中断向量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Atmega328P%E4%B8%8A%E7%9A%84%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD"><span class="toc-number">6.</span> <span class="toc-text">Atmega328P上的硬件中断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">7.</span> <span class="toc-text">参考文献</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -286,9 +396,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
